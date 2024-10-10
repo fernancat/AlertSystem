@@ -6,20 +6,20 @@ import lombok.NoArgsConstructor
 import lombok.Setter
 
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User(
-    private val name:String,
-    private val lastname:String,
-    private val email:String,
-    private val password:String,
-    private val cui:String,
-    private val number:String,
-    private val Department:String,
-    private val municipality:String,
+    var uid:String,
+     var name:String,
+     var lastname:String,
+     var email:String,
+     var password:String,
+     var cui:String,
+     var number:String,
+     var Department:String,
+     var municipality:String,
 
 
 ) {
+
 }
