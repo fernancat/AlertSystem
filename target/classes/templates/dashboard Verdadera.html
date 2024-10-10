@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Alertas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <!-- Sidebar (same as before) -->
+        <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+            <div class="h-full px-3 py-4 overflow-y-auto bg-gray-800">
+                <a href="#" class="flex items-center pl-2.5 mb-5">
+                    <span class="self-center text-xl font-semibold whitespace-nowrap text-white">Sistema de Alertas</span>
+                </a>
+                <ul class="space-y-2 font-medium">
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-white rounded-lg bg-gray-700">
+                            <svg class="w-6 h-6 text-gray-400 transition duration-75 group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
+                            <span class="ml-3">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-white rounded-lg hover:bg-gray-700">
+                            <svg class="w-6 h-6 text-gray-400 transition duration-75 group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
+                            <span class="flex-1 ml-3 whitespace-nowrap">Alertas</span>
+                            <span class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full">Pro</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-white rounded-lg hover:bg-gray-700">
+                            <svg class="w-6 h-6 text-gray-400 transition duration-75 group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path></svg>
+                            <span class="flex-1 ml-3 whitespace-nowrap">Cerrar Sesión</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <div class="p-4 sm:ml-64">
+            <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg mt-14">
+                <h1 class="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
+
+                <!-- Alert Statistics -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900" th:text="${totalAlertas}">385</span>
+                                <h3 class="text-base font-normal text-gray-500">Alertas Totales</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900" th:text="${alertasActivas}">85</span>
+                                <h3 class="text-base font-normal text-gray-500">Alertas Activas</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900" th:text="${alertasPorTomar}">300</span>
+                                <h3 class="text-base font-normal text-gray-500">Alertas Por Tomar</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900" th:text="${categoriasUnicas}">4</span>
+                                <h3 class="text-base font-normal text-gray-500">Categorías Únicas</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Alerts and Chart -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                    <!-- Latest Alerts -->
+                    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
+                        <h3 class="text-xl leading-none font-bold text-gray-900 mb-4">Últimas 10 Alertas</h3>
+                        <div class="block w-full overflow-x-auto">
+                            <table class="items-center w-full bg-transparent border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">ID</th>
+                                        <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">Estado</th>
+                                        <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">Categoría</th>
+                                        <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr th:each="alerta : ${ultimasAlertas}" class="text-gray-500">
+                                        <td class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4" th:text="${alerta.id}">1</td>
+                                        <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">
+                                            <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800" th:if="${alerta.estado == 'activa'}">
+                                                Activa
+                                            </div>
+                                            <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800" th:if="${alerta.estado == 'por_tomar'}">
+                                                Por tomar
+                                            </div>
+                                        </td>
+                                        <td class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4" th:text="${alerta.categoria}">Seguridad</td>
+                                        <td class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4" th:text="${alerta.descripcion}">Descripción de la alerta</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart -->
+                    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
+                        <h3 class="text-xl leading-none font-bold text-gray-900 mb-4">Distribución de Alertas por Categoría</h3>
+                        <div class="chart-container" style="position: relative; height:300px; width:100%">
+                            <canvas id="alertasPorCategoria"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 mb-4">
+                    <h3 class="text-xl leading-none font-bold text-gray-900 mb-4">Acciones Rápidas</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">
+                            Crear Nueva Alerta
+                        </a>
+                        <a href="#" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">
+                            Ver Todas las Alertas
+                        </a>
+                        <a href="#" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">
+                            Generar Reporte
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drawer init and toggle -->
+    <div class="text-center">
+        <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar">
+            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <script th:inline="javascript">
+        // Chart data
+        var ctx = document.getElementById('alertasPorCategoria').getContext('2d');
+        var alertasPorCategoria = /*[[${alertasPorCategoria}]]*/ {};
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(alertasPorCategoria),
+                datasets: [{
+                    
+                    data: Object.values(alertasPorCategoria),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                    ],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                },
+            }
+        });
+    </script>
+</body>
+</html>
