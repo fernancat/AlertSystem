@@ -6,77 +6,152 @@
     <title>Sistema de Alertas</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Sistema de Alertas</h1>
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-md">
+            <div class="p-4">
+                <h2 class="text-2xl font-semibold text-gray-800">Sistema de Alertas</h2>
+            </div>
+            <nav class="mt-4">
+                <a href="#" class="flex items-center px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
+                    <i class="fas fa-bell mr-3"></i>
+                    Alertas
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
+                    <i class="fas fa-cog mr-3"></i>
+                    Configuración
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
+                    <i class="fas fa-chart-bar mr-3"></i>
+                    Reportes
+                </a>
+            </nav>
+        </aside>
 
-        <!-- Formulario de filtro -->
-        <form th:action="@{/alertas}" method="get" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div>
-                    <label for="estado" class="block mb-2 text-sm font-medium text-gray-900">Estado</label>
-                    <select id="estado" name="estado" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                        <option value="">Todos</option>
-                        <option value="activa">Activa</option>
-                        <option value="por_tomar">Por tomar</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="categoria" class="block mb-2 text-sm font-medium text-gray-900">Categoría</label>
-                    <input type="text" id="categoria" name="categoria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Filtrar por categoría">
-                </div>
-                <div>
-                    <label for="descripcion" class="block mb-2 text-sm font-medium text-gray-900">Descripción</label>
-                    <input type="text" id="descripcion" name="descripcion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Filtrar por descripción">
-                </div>
-                <div>
-                    <label for="id" class="block mb-2 text-sm font-medium text-gray-900">ID</label>
-                    <input type="text" id="id" name="id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Filtrar por ID">
+        <!-- Main Content -->
+        <main class="flex-1 p-6 overflow-hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-semibold text-gray-800">Dashboard</h1>
+                
+                <!-- Profile Dropdown -->
+                <div class="relative">
+                    <button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="flex text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300" type="button">
+                        <span class="sr-only">Open user menu</span>
+                        <img class="w-8 h-8 rounded-full" src="/placeholder.svg?height=32&width=32" alt="user photo">
+                    </button>
+
+                    <!-- Dropdown menu -->
+                    <div id="dropdownAvatar" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+                        <div class="px-4 py-3 text-sm text-gray-900">
+                            <div>John Doe</div>
+                            <div class="font-medium truncate">john.doe@company.com</div>
+                        </div>
+                        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownUserAvatarButton">
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100">Perfil</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100">Configuración</a>
+                            </li>
+                        </ul>
+                        <div class="py-2">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cerrar sesión</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="mt-4">
-                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">Filtrar</button>
-                <a th:href="@{/alertas}" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">Limpiar filtros</a>
-            </div>
-        </form>
 
-        <!-- Tabla de alertas -->
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">ID</th>
-                        <th scope="col" class="px-6 py-3">Estado</th>
-                        <th scope="col" class="px-6 py-3">Categoría</th>
-                        <th scope="col" class="px-6 py-3">Descripción</th>
-                        <th scope="col" class="px-6 py-3">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="alerta : ${alertas}" class="bg-white border-b hover:bg-gray-50">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" th:text="${alerta.id}">
-                            ID de la alerta
-                        </th>
-                        <td class="px-6 py-4">
-                            <span th:if="${alerta.estado == 'activa'}" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">Activa</span>
-                            <span th:if="${alerta.estado == 'por_tomar'}" class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">Por tomar</span>
-                        </td>
-                        <td class="px-6 py-4" th:text="${alerta.categoria}">
-                            Categoría de la alerta
-                        </td>
-                        <td class="px-6 py-4" th:text="${alerta.descripcion}">
-                            Descripción de la alerta
-                        </td>
-                        <td class="px-6 py-4">
-                            <a th:href="@{/alertas/{id}(id=${alerta.id})}" class="font-medium text-blue-600 hover:underline mr-2">Ver</a>
-                            <a th:href="@{/alertas/{id}/editar(id=${alerta.id})}" class="font-medium text-green-600 hover:underline mr-2">Editar</a>
-                            <a th:href="@{/alertas/{id}/eliminar(id=${alerta.id})}" class="font-medium text-red-600 hover:underline" onclick="return confirm('¿Estás seguro de que quieres eliminar esta alerta?')">Eliminar</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-- Alert List -->
+            <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+                <h2 class="text-xl font-semibold mb-4">Alertas Recientes</h2>
+                <div id="alertList" class="space-y-4">
+                    <!-- Alert items will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- Dashboard Widgets -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-semibold mb-2">Total de Alertas</h3>
+                    <p class="text-3xl font-bold">0</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-semibold mb-2">Alertas Activas</h3>
+                    <p class="text-3xl font-bold">0</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-semibold mb-2">Alertas Resueltas</h3>
+                    <p class="text-3xl font-bold">0</p>
+                </div>
+            </div>
+        </main>
     </div>
+
+    <script th:inline="javascript">
+        // Simulating real-time alerts
+        function addAlert(id, message, person, lat, lon, timestamp) {
+            const alertList = document.getElementById('alertList');
+            const alertItem = document.createElement('div');
+            alertItem.className = 'p-4 mb-4 text-sm rounded-lg bg-yellow-100 text-yellow-800 flex justify-between items-center';
+            alertItem.innerHTML = `
+                <div>
+                    <p class="font-bold">${message}</p>
+                    <p>Emitido por: ${person}</p>
+                    <p>Ubicación: ${lat.toFixed(6)}, ${lon.toFixed(6)}</p>
+                    <p>Fecha: ${new Date(timestamp).toLocaleString()}</p>
+                </div>
+                <a href="/alert-details" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
+                    Ver Alerta
+                </a>
+            `;
+            alertList.prepend(alertItem);
+        }
+
+        // Simulate incoming alerts
+        let alertId = 0;
+        setInterval(() => {
+            const messages = [
+                "Nueva alerta de seguridad detectada.",
+                "Actualización del sistema completada.",
+                "Se requiere mantenimiento urgente.",
+                "Alerta de temperatura en el servidor."
+            ];
+            const persons = ["Juan Pérez", "María García", "Carlos López", "Ana Martínez"];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            const randomPerson = persons[Math.floor(Math.random() * persons.length)];
+            const randomLat = 14 + Math.random() * 2; // Guatemala latitude range
+            const randomLon = -92 + Math.random() * 2; // Guatemala longitude range
+            const timestamp = new Date().getTime();
+            addAlert(alertId++, randomMessage, randomPerson, randomLat, randomLon, timestamp);
+        }, 5000); // Add a new alert every 5 seconds
+
+        // Update dashboard numbers
+        let totalAlerts = 0;
+        let activeAlerts = 0;
+        let resolvedAlerts = 0;
+
+        function updateDashboard() {
+            totalAlerts++;
+            activeAlerts = Math.min(totalAlerts, activeAlerts + 1);
+            if (Math.random() > 0.7) {
+                resolvedAlerts = Math.min(activeAlerts, resolvedAlerts + 1);
+                activeAlerts = Math.max(0, activeAlerts - 1);
+            }
+
+            document.querySelector('div:nth-child(1) p.text-3xl').textContent = totalAlerts;
+            document.querySelector('div:nth-child(2) p.text-3xl').textContent = activeAlerts;
+            document.querySelector('div:nth-child(3) p.text-3xl').textContent = resolvedAlerts;
+        }
+
+        setInterval(updateDashboard, 5000); // Update dashboard every 5 seconds
+    </script>
 </body>
 </html>

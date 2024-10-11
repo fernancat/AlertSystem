@@ -47,14 +47,14 @@
             <div class="mt-8 flex justify-center">
                 <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">Iniciar Sesión</h2>
-                    <form th:action="@{/login}" method="post">
+                    <form th:action="@{/login}" method="post" th:object="${user}">
                         <div class="mb-4">
-                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Correo Electrónico</label>
-                            <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="nombre@ejemplo.com" required>
+                            <label  for="email" class="block mb-2 text-sm font-medium text-gray-900">Correo Electrónico</label>
+                            <input th:field="*{email}" type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="nombre@ejemplo.com" required>
                         </div>
                         <div class="mb-4">
                             <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Contraseña</label>
-                            <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                            <input th:field="*{password}" type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                         </div>
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none w-full">Iniciar Sesión</button>
                     </form>
