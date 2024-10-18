@@ -14,7 +14,6 @@ class User() {
  var number: String = ""
  var department: String = ""
  var municipality: String = ""
- var rol: String =""
 
 
  constructor(
@@ -38,9 +37,4 @@ class User() {
   this.department = department
   this.municipality = municipality
  }
-
- override fun toString(): String {
-  return "User(uid='$uid', name='$name', lastname='$lastname', email='$email', password='$password', cui='$cui', number='$number', department='$department', municipality='$municipality', rol='$rol')"
- }
-
 }

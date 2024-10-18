@@ -12,31 +12,39 @@
     <div class="container mx-auto p-4">
         <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
             <h2 class="text-2xl font-bold mb-6 text-center">Registro de Usuario</h2>
-            <form id="registrationForm">
+            <form id="registrationForm" th:action="@{/register}" method="post" th:object="${user}">
                 <div class="mb-4">
                     <label for="nombres" class="block mb-2 text-sm font-medium text-gray-900">Nombres</label>
-                    <input type="text" id="nombres" name="nombres" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                    <input th:field="*{name}" type="text" id="nombres" name="nombres" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                 </div>
                 <div class="mb-4">
                     <label for="apellidos" class="block mb-2 text-sm font-medium text-gray-900">Apellidos</label>
-                    <input type="text" id="apellidos" name="apellidos" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                    <input th:field="*{lastname}" type="text" id="apellidos" name="apellidos" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
+                    <input th:field="*{email}" type="email" id="email" name="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Contraseña</label>
+                    <input  th:field="*{password}" type="password" id="password" name="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                 </div>
                 <div class="mb-4">
                     <label for="cui" class="block mb-2 text-sm font-medium text-gray-900">CUI</label>
-                    <input type="text" id="cui" name="cui" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                    <input th:field="*{cui}" type="text" id="cui" name="cui" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                     <p id="cuiError" class="mt-2 text-sm text-red-600 hidden">CUI inválido</p>
                 </div>
                 <div class="mb-4">
                     <label for="telefono" class="block mb-2 text-sm font-medium text-gray-900">Teléfono</label>
-                    <input type="tel" id="telefono" name="telefono" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                    <input th:field="*{number}" type="tel" id="telefono" name="telefono" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                 </div>
                 <div class="mb-4">
                     <label for="departamento" class="block mb-2 text-sm font-medium text-gray-900">Departamento</label>
-                    <input type="text" id="departamento" name="departamento" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" readonly>
+                    <input th:field="*{department}" type="text" id="departamento" name="departamento" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" readonly>
                 </div>
                 <div class="mb-6">
                     <label for="municipio" class="block mb-2 text-sm font-medium text-gray-900">Municipio</label>
-                    <input type="text" id="municipio" name="municipio" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" readonly>
+                    <input th:field="*{municipality}" type="text" id="municipio" name="municipio" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" readonly>
                 </div>
                 <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Registrar</button>
             </form>
@@ -151,11 +159,7 @@
             }
         });
 
-        $('#registrationForm').on('submit', function(e) {
-            e.preventDefault();
-            // Add your form submission logic here
-            alert('Formulario enviado con éxito!');
-        });
+
     </script>
 </body>
 </html>

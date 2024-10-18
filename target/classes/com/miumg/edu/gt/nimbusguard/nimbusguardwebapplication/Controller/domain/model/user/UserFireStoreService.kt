@@ -12,7 +12,7 @@ import reactor.kotlin.core.publisher.toMono
 class UserFireStoreService {
     private val fireStoreInstance = FirestoreClient.getFirestore()
 
-    public fun getUserByUID(uid:String): User {
+    public fun obtenerUsuarioPorUID(uid:String): User {
         val refUser = fireStoreInstance.collection("users").document(uid)
         val future:ApiFuture<DocumentSnapshot> = refUser.get()
         val document:DocumentSnapshot = future.get()
@@ -31,12 +31,6 @@ class UserFireStoreService {
 
 
 
-
-    }
-
-
-    public fun registerUserInFireStore(user:User) {
-        fireStoreInstance.collection("users").document(user.uid).set(user)
 
     }
 }
