@@ -6,10 +6,7 @@ import com.miumg.edu.gt.nimbusguard.nimbusguardwebapplication.Controller.domain.
 import com.miumg.edu.gt.nimbusguard.nimbusguardwebapplication.Controller.domain.model.user.UserFirebaseAuthService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.WebSession
 
 
@@ -28,10 +25,7 @@ class MainController(
 
         return "LoginInicio"
     }
-    @GetMapping("/alert-details")
-    fun alertDetails(Model: Model) :String {
-        return "alert-details"
-    }
+
 
     @PostMapping("/login")
     fun loginUser(
@@ -97,10 +91,37 @@ class MainController(
         session:WebSession
     ):String{
         val user = session.getAttribute<User>("user")
-        if (user?.rol != "socorrista" || user?.rol.equals("")){
+        if (user?.rol != "socorrista" || user.rol.equals("")){
             return  "redirect:/"
         }
         model.addAttribute("user",user)
         return "dashboard"
+    }
+
+
+    @GetMapping("/alert-details")
+    public fun alertDetails(
+        @RequestParam("type") type: String,
+        @RequestParam("nameUser") nameUser: String,
+        @RequestParam("date") date: String,
+        @RequestParam("lat") latitude: String,
+        @RequestParam("long") longitude: String,
+        model: Model,
+        session:WebSession
+    ): String {
+        val user = session.getAttribute<User>("user")
+        if (user?.rol != "socorrista" || user.rol.equals("")){
+            return  "redirect:/"
+        }
+
+
+
+        model.addAttribute("type",type)
+        model.addAttribute("nameUser",nameUser)
+        model.addAttribute("date",date)
+        model.addAttribute("lat",latitude)
+        model.addAttribute("long",longitude)
+
+        return "alert-details"
     }
 }

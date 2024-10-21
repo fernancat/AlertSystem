@@ -15,7 +15,7 @@
         <div class="bg-white shadow-md rounded-lg p-6">
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-3xl font-semibold text-gray-800">Detalles de Alerta</h1>
-                <a href="/" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                <a href="/dashboard" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                     Volver al Dashboard
                 </a>
             </div>
@@ -49,24 +49,23 @@
     </div>
 
     <script th:inline="javascript">
-        // Simulated alert data (in a real application, this would come from the server)
         const alertData = {
-            id: new URLSearchParams(window.location.search).get('id'),
+            //id: /*[[${uid}]]*/,
             message: "Nueva alerta de seguridad detectada.",
-            person: "Juan Pérez",
-            timestamp: new Date().toLocaleString(),
-            lat: 14.634915,
-            lon: -90.506882
+            person: /*[[${nameUser}]]*/,  // Nombre del usuario que generó la alerta
+            timestamp: /*[[${date}]]*/,   // Fecha de la alerta
+            lat: /*[[${lat}]]*/,          // Latitud
+            lon: /*[[${long}]]*/          // Longitud
         };
 
-        // Populate alert details
+
         document.getElementById('alertId').textContent = alertData.id;
         document.getElementById('alertMessage').textContent = alertData.message;
         document.getElementById('alertPerson').textContent = alertData.person;
         document.getElementById('alertTimestamp').textContent = alertData.timestamp;
-        document.getElementById('alertLocation').textContent = `${alertData.lat.toFixed(6)}, ${alertData.lon.toFixed(6)}`;
+        document.getElementById('alertLocation').textContent = `${alertData.lat}, ${alertData.lon}`;
 
-        // Initialize map
+        // Inicializar mapa con Leaflet
         const map = L.map('map').setView([alertData.lat, alertData.lon], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -75,7 +74,7 @@
             .bindPopup('Ubicación de la Alerta')
             .openPopup();
 
-        // Handle resolve button
+        // Manejo del botón de resolver alerta
         document.getElementById('resolveAlert').addEventListener('click', function() {
             document.getElementById('alertStatus').textContent = 'Resuelta';
             document.getElementById('alertStatus').classList.remove('text-yellow-600');
@@ -84,7 +83,7 @@
             this.classList.add('opacity-50', 'cursor-not-allowed');
         });
 
-        // Handle delete button
+
         document.getElementById('deleteAlert').addEventListener('click', function() {
             if (confirm('¿Está seguro de que desea eliminar esta alerta?')) {
                 alert('Alerta eliminada');
@@ -92,5 +91,6 @@
             }
         });
     </script>
+
 </body>
 </html>

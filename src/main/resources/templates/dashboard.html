@@ -107,6 +107,8 @@
     function addAlert(user,  lat, lon, timestamp) {
         const alertList = document.getElementById('alertList');
         const alertItem = document.createElement('div');
+        const url = `/alert-details?type=wait&nameUser=${encodeURIComponent(user.name + " " + user.lastname)}&date=${encodeURIComponent(timestamp)}&lat=${lat}&long=${lon}`;
+
         alertItem.className = 'p-4 mb-4 text-sm rounded-lg bg-yellow-100 text-yellow-800 flex justify-between items-center';
         alertItem.innerHTML = `
                 <div>
@@ -115,7 +117,7 @@
                     <p>Ubicación: ${lat.toFixed(6)}, ${lon.toFixed(6)}</p>
                     <p>Fecha: ${timestamp}</p>
                 </div>
-                <a href="/alert-details" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
+                <a href="${url}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
                     Ver Alerta
                 </a>
             `;
@@ -125,11 +127,11 @@
         if (alertList.childElementCount % 3 === 0) {
             setTimeout(() => {
                 alertList.innerHTML = ''; // Clear alerts
-            }, 3000); /
+            }, 3000);
         }
     }
 
-    // Update dashboard numbers
+
     let totalAlerts = 0;
     let activeAlerts = 0;
     let resolvedAlerts = 0;
