@@ -10,7 +10,7 @@ class WebClientConfig {
     @Bean
     fun webClient(): WebClient {
         return WebClient.builder()
-            .baseUrl("https://identitytoolkit.googleapis.com/v1") // Asegúrate de que la base URL sea correcta
+            .baseUrl("https://identitytoolkit.googleapis.com/v1") 
             .build()
     }
 }
