@@ -28,6 +28,14 @@ Para solucionar este problema, implementé **Server-Sent Events (SSE)**. Esta t�
 3. Configura tu conexión a Firebase y las credenciales necesarias.
 4. Ejecuta la aplicación desde tu IDE
 
+### Imagenes Demostracion
+![image](https://github.com/user-attachments/assets/0d95cc33-3721-4e8d-bf0f-fad7ea3b18d2)
+![image](https://github.com/user-attachments/assets/38f611f7-5b68-4855-8050-5207dc0ebbe1)
+![image](https://github.com/user-attachments/assets/2c9335c8-6d32-4122-a429-118d65f59f56)
+![image](https://github.com/user-attachments/assets/02dbdd37-e404-4a55-bb5b-76a55c6e1cdd)
+![image](https://github.com/user-attachments/assets/9a888493-b7e3-4b0b-b59c-77ce9a89e0f1)
+
+
 ### Videos Demostraciones
 https://drive.google.com/drive/folders/1I1PtBVASMwIdViJuSarHvQsiUrdw6yUO
 - **Tik Tok Compañero**: https://vm.tiktok.com/ZMh4M3ugv/
