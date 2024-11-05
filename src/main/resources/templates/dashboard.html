@@ -5,39 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Alertas</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles to fix layout issues */
+        body, html {
+            height: 100%;
+            overflow: hidden;
+        }
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 250px; /* Adjust as needed */
+            flex-shrink: 0;
+            overflow-y: auto;
+        }
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
-<div class="flex h-screen bg-gray-100">
+<div class="layout-container">
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md">
-        <div class="p-4">
-            <h2 class="text-2xl font-semibold text-gray-800">Sistema de Alertas</h2>
-        </div>
-        <nav class="mt-4">
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200">
-                <i class="fas fa-tachometer-alt mr-3"></i>
-                Dashboard
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
-                <i class="fas fa-bell mr-3"></i>
-                Alertas
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
-                <i class="fas fa-cog mr-3"></i>
-                Configuración
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
-                <i class="fas fa-chart-bar mr-3"></i>
-                Reportes
-            </a>
-        </nav>
+    <aside th:replace="~{/layout/plantilla.html :: sidebar}" class="sidebar bg-white shadow-md">
+
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 p-6 overflow-hidden">
+    <main class="main-content">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-semibold text-gray-800">Dashboard</h1>
             <!-- Profile Dropdown -->
@@ -54,14 +56,20 @@
                     </div>
                     <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownUserAvatarButton">
                         <li>
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Perfil</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">
+                                <i class="fas fa-user-circle mr-2"></i>Perfil
+                            </a>
                         </li>
                         <li>
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Configuración</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">
+                                <i class="fas fa-cog mr-2"></i>Configuración
+                            </a>
                         </li>
                     </ul>
                     <div class="py-2">
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cerrar sesión</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
+                        </a>
                     </div>
                 </div>
             </div>
@@ -69,7 +77,9 @@
 
         <!-- Alert List -->
         <div class="bg-white shadow-md rounded-lg p-4 mb-6">
-            <h2 class="text-xl font-semibold mb-4">Alertas Recientes</h2>
+            <h2 class="text-xl font-semibold mb-4">
+                <i class="fas fa-bell mr-2"></i>Alertas Recientes
+            </h2>
             <div id="alertList" class="space-y-4">
                 <!-- Alert items will be dynamically added here -->
             </div>
@@ -78,78 +88,113 @@
         <!-- Dashboard Widgets -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-lg font-semibold mb-2">Total de Alertas</h3>
+                <h3 class="text-lg font-semibold mb-2">
+                    <i class="fas fa-exclamation-circle mr-2"></i>Total de Alertas
+                </h3>
+                <p class="text-3xl font-bold" th:text="${totalAlerts}"></p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold mb-2">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>Alertas Activas
+                </h3>
                 <p class="text-3xl font-bold">0</p>
             </div>
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-lg font-semibold mb-2">Alertas Activas</h3>
-                <p class="text-3xl font-bold">0</p>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-lg font-semibold mb-2">Alertas Resueltas</h3>
-                <p class="text-3xl font-bold">0</p>
+                <h3 class="text-lg font-semibold mb-2">
+                    <i class="fas fa-check-circle mr-2"></i>Alertas Resueltas
+                </h3>
+                <p class="text-3xl font-bold" th:text="${SolveAlert}">0</p>
             </div>
         </div>
     </main>
 </div>
-
 <script th:inline="javascript">
+    let totalAlerts = [[${totalAlerts}]]    ;
+    let activeAlerts = 0;
+    let resolvedAlerts = [[${SolveAlert}]]  ;
+    console.log(resolvedAlerts)
 
     const eventSource = new EventSource('/alerts/stream');
 
     eventSource.onmessage = function(event) {
         const alertData = JSON.parse(event.data);
-        addAlert(alertData.user, alertData.latitude, alertData.longitude,alertData.date);
+        if (alertData.idAlert !== "") {
+            addAlert(alertData.idAlert, alertData.typeAlert, alertData.state, alertData.user, alertData.latitude, alertData.longitude, alertData.date);
+            totalAlerts+=1;
+            activeAlerts++;
+            updateDashboard();
+            console.log(alertData);
+        }
         console.log(alertData)
     };
 
-
-    function addAlert(user,  lat, lon, timestamp) {
+    function addAlert(idAlert, typeAlert, state, user, lat, lon, timestamp) {
         const alertList = document.getElementById('alertList');
         const alertItem = document.createElement('div');
-        const url = `/alert-details?type=wait&nameUser=${encodeURIComponent(user.name + " " + user.lastname)}&date=${encodeURIComponent(timestamp)}&lat=${lat}&long=${lon}`;
+        const url = `/alert-details/${idAlert}`;
+        let bgColor = '';
+        let icon = '';
 
-        alertItem.className = 'p-4 mb-4 text-sm rounded-lg bg-yellow-100 text-yellow-800 flex justify-between items-center';
+        // Asignación de color de fondo y icono según el tipo de alerta
+        switch(typeAlert) {
+            case 'Urgencia Médica':
+                bgColor = 'bg-red-100 text-red-800';
+                icon = '<i class="fas fa-ambulance mr-2"></i>';
+                break;
+            case 'Delito o Intervención':
+                bgColor = 'bg-blue-100 text-blue-800';
+                icon = '<i class="fas fa-shield-alt mr-2"></i>';
+                break;
+            case 'Incendio':
+                bgColor = 'bg-yellow-100 text-yellow-800';
+                icon = '<i class="fas fa-fire mr-2"></i>';
+                break;
+            case 'Solicitud de Grua':
+                bgColor = 'bg-gray-100 text-gray-800';
+                icon = '<i class="fas fa-truck mr-2"></i>';
+                break;
+            case 'Accidente de Tráfico':
+                bgColor = 'bg-black text-white';
+                icon = '<i class="fas fa-car-crash mr-2"></i>';
+                break;
+            default:
+                bgColor = 'bg-green-100 text-green-800'; // Color por defecto
+                icon = '<i class="fas fa-info-circle mr-2"></i>';
+        }
+
+        // Creación del contenido HTML con color e icono específicos
+        alertItem.className = `p-4 mb-4 text-sm rounded-lg ${bgColor} flex justify-between items-center`;
         alertItem.innerHTML = `
-                <div>
-                    <p class="font-bold">Emergencia por atender</p>
-                    <p>Emitido por: ${user.name + " " + user.lastname}</p>
-                    <p>Ubicación: ${lat.toFixed(6)}, ${lon.toFixed(6)}</p>
-                    <p>Fecha: ${timestamp}</p>
-                </div>
-                <a href="${url}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
-                    Ver Alerta
-                </a>
-            `;
+        <div>
+            <p class="font-bold">${icon}Emergencia: ${typeAlert}</p>
+            <p><i class="fas fa-user mr-2"></i>Emitido por: ${user.name + " " + user.lastname}</p>
+            <p><i class="fas fa-map-marker-alt mr-2"></i>Ubicación: ${lat.toFixed(6)}, ${lon.toFixed(6)}</p>
+            <p><i class="fas fa-info-circle mr-2"></i>Estado: ${state}</p>
+            <p><i class="fas fa-calendar-alt mr-2"></i>Fecha: ${timestamp}</p>
+        </div>
+        <a href="${url}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
+            <i class="fas fa-eye mr-2"></i>Ver Alerta
+        </a>
+    `;
         alertList.prepend(alertItem);
 
 
         if (alertList.childElementCount % 3 === 0) {
             setTimeout(() => {
-                alertList.innerHTML = ''; // Clear alerts
+                alertList.innerHTML = '';
             }, 3000);
         }
     }
 
 
-    let totalAlerts = 0;
-    let activeAlerts = 0;
-    let resolvedAlerts = 0;
-
     function updateDashboard() {
-        totalAlerts++;
-        activeAlerts = Math.min(totalAlerts, activeAlerts + 1);
-        if (Math.random() > 0.7) {
-            resolvedAlerts = Math.min(activeAlerts, resolvedAlerts + 1);
-            activeAlerts = Math.max(0, activeAlerts - 1);
-        }
-
         document.querySelector('div:nth-child(1) p.text-3xl').textContent = totalAlerts;
         document.querySelector('div:nth-child(2) p.text-3xl').textContent = activeAlerts;
-        document.querySelector('div:nth-child(3) p.text-3xl').textContent = resolvedAlerts;
+
     }
 
-    setInterval(updateDashboard, 5000); // Update dashboard every 5 seconds
+
 </script>
+
 </body>
 </html>

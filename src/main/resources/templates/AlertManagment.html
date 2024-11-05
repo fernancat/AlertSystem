@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Alertas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+</head>
+<body class="bg-gray-100">
+
+<div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside th:replace="~{/layout/plantilla.html :: sidebar}" class="w-64 bg-white shadow-md p-4 flex-shrink-0">
+        <!-- Sidebar content -->
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-6 overflow-y-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Sistema de Alertas</h1>
+
+        <!-- Filters -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div>
+                <label for="filtroNombreUsuario" class="block mb-2 text-sm font-medium text-gray-900">Nombre Usuario</label>
+                <input type="text" id="filtroNombreUsuario" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            </div>
+            <div>
+                <label for="filtroCui" class="block mb-2 text-sm font-medium text-gray-900">CUI</label>
+                <input type="text" id="filtroCui" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            </div>
+            <div>
+                <label for="filtroTipo" class="block mb-2 text-sm font-medium text-gray-900">Tipo</label>
+                <input type="text" id="filtroTipo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            </div>
+            <div>
+                <label for="filtroEstado" class="block mb-2 text-sm font-medium text-gray-900">Estado</label>
+                <input type="text" id="filtroEstado" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            </div>
+        </div>
+
+        <!-- Alert categories -->
+        <div class="mb-4 border-b border-gray-200">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="alertTabs" role="tablist">
+                <li class="mr-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="pending-tab" data-tabs-target="#pending" type="button" role="tab" aria-controls="pending" aria-selected="false">Pendientes</button>
+                </li>
+                <li class="mr-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="attention-tab" data-tabs-target="#attention" type="button" role="tab" aria-controls="attention" aria-selected="false">En Atención</button>
+                </li>
+                <li class="mr-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="resolved-tab" data-tabs-target="#resolved" type="button" role="tab" aria-controls="resolved" aria-selected="false">Resueltas</button>
+                </li>
+                <li role="presentation">
+                    <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="false-tab" data-tabs-target="#false" type="button" role="tab" aria-controls="false" aria-selected="false">Falsas</button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Alert cards container -->
+        <div id="alertTabContent">
+            <!-- Pending Alerts -->
+            <div class="hidden p-4 rounded-lg bg-gray-50" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                <div class="flex overflow-x-auto space-x-4 pb-4">
+                    <div th:each="alerta : ${alerts}" th:if="${alerta.state == 'Pendiente' and alerta.idAlert!=null and !alerta.idAlert.isEmpty() and alerta.idAlert !='null'}" class="flex-none w-72">
+                        <div  class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
+                            <svg class="w-10 h-10 mb-2 text-yellow-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                            <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900" th:text="${alerta.user.name}">Nombre del Usuario</h5>
+                            <p class="mb-3 font-normal text-gray-500" th:text="${alerta.typeAlert}">Tipo de Alerta</p>
+                            <p class="mb-3 font-normal text-gray-700" th:text="${'CUI: ' + alerta.user.cui}">CUI: 12345678</p>
+                            <a th:href="@{/alert-details/{uid}(uid=${alerta.idAlert})}" class="inline-flex items-center text-blue-600 hover:underline">
+                                Ver detalles
+                                <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- In Attention Alerts -->
+            <div class="hidden p-4 rounded-lg bg-gray-50" id="attention" role="tabpanel" aria-labelledby="attention-tab">
+                <div class="flex overflow-x-auto space-x-4 pb-4">
+                    <div th:each="alerta : ${alerts}" th:if="${alerta.state == 'En Atencion' and alerta.idAlert!=null and !alerta.idAlert.isEmpty() and alerta.idAlert !='null'}" class="flex-none w-72">
+                        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
+                            <svg class="w-10 h-10 mb-2 text-blue-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                            <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900" th:text="${alerta.user.name}">Nombre del Usuario</h5>
+                            <p class="mb-3 font-normal text-gray-500" th:text="${alerta.typeAlert}">Tipo de Alerta</p>
+                            <p class="mb-3 font-normal text-gray-700" th:text="${'CUI: ' + alerta.user.cui}">CUI: 12345678</p>
+                            <a th:href="@{/alert-details/{uid}(uid=${alerta.idAlert})}" class="inline-flex items-center text-blue-600 hover:underline">
+                                Ver detalles
+                                <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resolved Alerts -->
+            <div class="hidden p-4 rounded-lg bg-gray-50" id="resolved" role="tabpanel" aria-labelledby="resolved-tab">
+                <div class="flex overflow-x-auto space-x-4 pb-4">
+                    <div th:each="alerta : ${alerts}" th:if="${alerta.state == 'Resuelto' and alerta.idAlert!=null and !alerta.idAlert.isEmpty() and alerta.idAlert !='null'}" class="flex-none w-72">
+                        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
+                            <svg class="w-10 h-10 mb-2 text-green-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900" th:text="${alerta.user.name}">Nombre del Usuario</h5>
+                            <p class="mb-3 font-normal text-gray-500" th:text="${alerta.typeAlert}">Tipo de Alerta</p>
+                            <p class="mb-3 font-normal text-gray-700" th:text="${'CUI: ' + alerta.user.cui}">CUI: 12345678</p>
+                            <a th:href="@{/alert-details/{uid}(uid=${alerta.idAlert})}" class="inline-flex items-center text-blue-600 hover:underline">
+                                Ver detalles
+                                <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- False Alerts -->
+            <div class="hidden p-4 rounded-lg bg-gray-50" id="false" role="tabpanel" aria-labelledby="false-tab">
+                <div class="flex overflow-x-auto space-x-4 pb-4">
+                    <div th:each="alerta : ${alerts}"   th:if="${alerta.state == 'Falsa' and alerta.idAlert!=null and !alerta.idAlert.isEmpty() and alerta.idAlert !='null'}" class="flex-none w-72">
+                        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
+                            <svg class="w-10 h-10 mb-2 text-red-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                            <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900" th:text="${alerta.user.name}">Nombre del Usuario</h5>
+                            <p class="mb-3 font-normal text-gray-500" th:text="${alerta.typeAlert}">Tipo de Alerta</p>
+                            <p class="mb-3 font-normal text-gray-700" th:text="${'CUI: ' + alerta.user.cui}">CUI: 12345678</p>
+                            <a th:href="@{/alert-details/{uid}(uid=${alerta.idAlert})}" class="inline-flex items-center text-blue-600 hover:underline">
+                                Ver detalles
+                                <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // Filtering function
+    function filterAlerts() {
+        const filters = {
+            nombreUsuario: document.getElementById('filtroNombreUsuario').value.toLowerCase(),
+            cui: document.getElementById('filtroCui').value.toLowerCase(),
+            tipo: document.getElementById('filtroTipo').value.toLowerCase(),
+            estado: document.getElementById('filtroEstado').value.toLowerCase()
+        };
+
+        const alertCards = document.querySelectorAll('.max-w-sm');
+
+        alertCards.forEach(card => {
+            const name = card.querySelector('h5').textContent.toLowerCase();
+            const type = card.querySelector('p').textContent.toLowerCase();
+            const cui = card.querySelectorAll('p')[1].textContent.toLowerCase();
+            const state = card.closest('[role="tabpanel"]').id;
+
+            let shouldShow = true;
+
+            if (filters.nombreUsuario && !name.includes(filters.nombreUsuario)) {
+                shouldShow = false;
+            }
+            if (filters.cui && !cui.includes(filters.cui)) {
+                shouldShow = false;
+            }
+            if (filters.tipo && !type.includes(filters.tipo)) {
+                shouldShow = false;
+            }
+            if (filters.estado && !state.includes(filters.estado)) {
+                shouldShow = false;
+            }
+
+            card.style.display = shouldShow ? '' : 'none';
+        });
+    }
+
+    // Add event listeners to filter inputs
+    document.getElementById('filtroNombreUsuario').addEventListener('input', filterAlerts);
+    document.getElementById('filtroCui').addEventListener('input', filterAlerts);
+    document.getElementById('filtroTipo').addEventListener('input', filterAlerts);
+    document.getElementById('filtroEstado').addEventListener('input', filterAlerts);
+
+    // Initialize Flowbite tabs
+    const tabElements = [
+        {
+            id: 'pending',
+            triggerEl: document.querySelector('#pending-tab'),
+            targetEl: document.querySelector('#pending')
+        },
+        {
+            id: 'attention',
+            triggerEl: document.querySelector('#attention-tab'),
+            targetEl: document.querySelector('#attention')
+        },
+        {
+            id: 'resolved',
+            triggerEl: document.querySelector('#resolved-tab'),
+            targetEl: document.querySelector('#resolved')
+        },
+        {
+            id: 'false',
+            triggerEl: document.querySelector('#false-tab'),
+            targetEl: document.querySelector('#false')
+        }
+    ];
+
+    const options = {
+        defaultTabId: 'pending',
+        activeClasses: 'text-blue-600 hover:text-blue-600 border-blue-600',
+        inactiveClasses: 'text-gray-500 hover:text-gray-600 border-gray-100 hover:border-gray-300',
+        onShow: () => {
+            console.log('tab is shown');
+        }
+    };
+
+    const tabs = new Tabs(tabElements, options);
+    tabs.show('pending');
+</script>
+
+</body>
+</html>

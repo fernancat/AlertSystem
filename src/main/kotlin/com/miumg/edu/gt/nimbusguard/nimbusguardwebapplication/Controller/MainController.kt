@@ -1,6 +1,7 @@
 package com.miumg.edu.gt.nimbusguard.nimbusguardwebapplication.Controller
 
 import com.miumg.edu.gt.nimbusguard.nimbusguardwebapplication.Controller.domain.model.alert.Alert
+import com.miumg.edu.gt.nimbusguard.nimbusguardwebapplication.Controller.domain.model.alert.AlertService
 import com.miumg.edu.gt.nimbusguard.nimbusguardwebapplication.Controller.domain.model.user.User
 import com.miumg.edu.gt.nimbusguard.nimbusguardwebapplication.Controller.domain.model.user.UserFireStoreService
 import com.miumg.edu.gt.nimbusguard.nimbusguardwebapplication.Controller.domain.model.user.UserFirebaseAuthService
@@ -11,12 +12,14 @@ import org.springframework.web.server.WebSession
 
 
 import reactor.core.publisher.Mono
+import java.util.stream.Collectors
 
 @Controller
 class MainController(
 
-    private val authService:UserFirebaseAuthService,
-    private val userFireStoreService: UserFireStoreService
+    private val authService: UserFirebaseAuthService,
+    private val userFireStoreService: UserFireStoreService,
+    private val alertService: AlertService
 ) {
 
     @GetMapping("/")
@@ -95,33 +98,71 @@ class MainController(
             return  "redirect:/"
         }
         model.addAttribute("user",user)
+        model.addAttribute("totalAlerts",alertService.getAllAlerts().count())
+        model.addAttribute("SolveAlert",alertService.getAllAlerts().stream()
+            .filter({a -> a.state == "Resuelto"})
+            .toList().count())
         return "dashboard"
     }
 
+    @GetMapping("/AlertManagment")
+    public fun getAlert(model:Model):String{
+        model.addAttribute("alerts", alertService.getAllAlerts())
 
-    @GetMapping("/alert-details")
+        return "AlertManagment"
+    }
+
+
+    @GetMapping("/alert-details/{uid}")
     public fun alertDetails(
-        @RequestParam("type") type: String,
-        @RequestParam("nameUser") nameUser: String,
-        @RequestParam("date") date: String,
-        @RequestParam("lat") latitude: String,
-        @RequestParam("long") longitude: String,
+       @PathVariable("uid") uid: String,
         model: Model,
         session:WebSession
     ): String {
+
         val user = session.getAttribute<User>("user")
+
         if (user?.rol != "socorrista" || user.rol.equals("")){
             return  "redirect:/"
         }
 
+        val alert = alertService.getAlertByUID(uid)
 
 
-        model.addAttribute("type",type)
-        model.addAttribute("nameUser",nameUser)
-        model.addAttribute("date",date)
-        model.addAttribute("lat",latitude)
-        model.addAttribute("long",longitude)
+        model.addAttribute("alert", alert   )
+
+
+        model.addAttribute("user",user)
+
+
+
+
+
+
+
+
+
 
         return "alert-details"
     }
+    @PostMapping("/alert-details")
+    public fun alertDetails(@ModelAttribute alert:Alert,
+                            session:WebSession):String{
+
+        val user = session.getAttribute<User>("user")
+        println("este es el nuevo id alert" +alert.idAlert)
+        if (user?.rol != "socorrista" || user.rol.equals("")){
+            return  "redirect:/"
+        }else {
+            if (alert.idAlert.isNotBlank()) {
+                println("este es el estado" + alert.state)
+                alertService.updateStateAlert(alert)
+                return "redirect:/AlertManagment"
+
+            }
+        }
+        return "redirect:/AlertManagment"
+    }
+
+
 }

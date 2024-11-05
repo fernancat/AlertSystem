@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Alert Managment</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+</head>
+<body>
+    <aside th:fragment="sidebar" class="w-64 bg-white shadow-md">
+        <div class="p-4">
+            <h2 class="text-2xl font-semibold text-gray-800">Sistema de Alertas</h2>
+        </div>
+        <nav class="mt-4">
+            <a th:href="@{/dashboard}" class="flex items-center px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200">
+                <i class="fas fa-tachometer-alt mr-3"></i>
+                Dashboard
+            </a>
+            <a th:href="@{/AlertManagment}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
+                <i class="fas fa-bell mr-3"></i>
+                Alertas
+            </a>
+        </nav>
+    </aside>
+</body>
+</html>

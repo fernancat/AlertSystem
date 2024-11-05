@@ -6,91 +6,105 @@
     <title>Detalles de Alerta</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-3xl font-semibold text-gray-800">Detalles de Alerta</h1>
-                <a href="/" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                    Volver al Dashboard
-                </a>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <h2 class="text-xl font-semibold mb-4">Información de la Alerta</h2>
-                    <p><strong>ID de Alerta:</strong> <span id="alertId"></span></p>
-                    <p><strong>Mensaje:</strong> <span id="alertMessage"></span></p>
-                    <p><strong>Emitido por:</strong> <span id="alertPerson"></span></p>
-                    <p><strong>Fecha y Hora:</strong> <span id="alertTimestamp"></span></p>
-                    <p><strong>Ubicación:</strong> <span id="alertLocation"></span></p>
-                    <p><strong>Estado:</strong> <span id="alertStatus" class="font-bold text-yellow-600">Activa</span></p>
-                </div>
-                <div>
-                    <h2 class="text-xl font-semibold mb-4">Ubicación en el Mapa</h2>
-                    <div id="map" class="h-64 rounded-lg"></div>
+
+<div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside th:replace="/layout/plantilla.html :: sidebar" class="w-64 bg-white shadow-md"></aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-6 overflow-y-auto">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-gray-900 mb-6">Detalles de Alerta</h1>
+
+            <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Alert Information Section -->
+                    <div>
+                        <h2 class="text-xl font-semibold mb-4">Información de la Alerta</h2>
+                        <div class="space-y-2">
+                            <p><span class="font-semibold">ID de Alerta:</span> <span id="alertId" class="ml-2"></span></p>
+                            <p><span class="font-semibold">Tipo de Alerta:</span> <span id="alertType" class="ml-2"></span></p>
+                            <p><span class="font-semibold">Emitido por:</span> <span id="alertPerson" class="ml-2"></span></p>
+                            <p><span class="font-semibold">Fecha y Hora:</span> <span id="alertTimestamp" class="ml-2"></span></p>
+                            <p><span class="font-semibold">Ubicación:</span> <span id="alertLocation" class="ml-2"></span></p>
+                            <p><span class="font-semibold">Estado:</span> <span id="alertStatus" class="ml-2 font-bold text-yellow-600"></span></p>
+                        </div>
+                    </div>
+
+                    <!-- Map Section -->
+                    <div>
+                        <h2 class="text-xl font-semibold mb-4">Ubicación en el Mapa</h2>
+                        <div id="map" class="h-64 w-full rounded-lg"></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="mt-8">
+
+            <!-- Actions Section -->
+            <div class="bg-white shadow-md rounded-lg p-6">
                 <h2 class="text-xl font-semibold mb-4">Acciones</h2>
-                <button id="resolveAlert" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4">
-                    Marcar como Resuelta
-                </button>
-                <button id="deleteAlert" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
-                    Eliminar Alerta
-                </button>
+                <form th:action="@{/alert-details}" method="post" th:object="${alert}" class="space-y-4">
+                    <input type="hidden" th:field="*{idAlert}">
+                    <div>
+                        <label for="alertState" class="block mb-2 text-sm font-medium text-gray-900">Cambiar Estado de Alerta</label>
+                        <select id="alertState" th:field="*{state}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En Atencion">En Atención</option>
+                            <option value="Resuelto">Resuelto</option>
+                            <option value="Falsa">Falsa</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        Actualizar Estado
+                    </button>
+                </form>
+
+                <div class="mt-6">
+                    <a th:href="@{/dashboard}" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        Volver al Dashboard
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
+</div>
 
-    <script th:inline="javascript">
-        // Simulated alert data (in a real application, this would come from the server)
-        const alertData = {
-            id: new URLSearchParams(window.location.search).get('id'),
-            message: "Nueva alerta de seguridad detectada.",
-            person: "Juan Pérez",
-            timestamp: new Date().toLocaleString(),
-            lat: 14.634915,
-            lon: -90.506882
-        };
+<script th:inline="javascript">
+    const alertData = {
+        id: /*[[${alert.idAlert}]]*/ null,
+        type: /*[[${alert.typeAlert}]]*/ null,
+        person: /*[[${alert.user.name}]]*/null,
+        timestamp: /*[[${alert.date}]]*/null,
+        lat: /*[[${alert.latitude}]]*/null,
+        lon: /*[[${alert.longitude}]]*/null,
+        state: /*[[${alert.state}]]*/null
+    };
 
-        // Populate alert details
-        document.getElementById('alertId').textContent = alertData.id;
-        document.getElementById('alertMessage').textContent = alertData.message;
-        document.getElementById('alertPerson').textContent = alertData.person;
-        document.getElementById('alertTimestamp').textContent = alertData.timestamp;
-        document.getElementById('alertLocation').textContent = `${alertData.lat.toFixed(6)}, ${alertData.lon.toFixed(6)}`;
+    document.getElementById('alertId').textContent = alertData.id;
+    document.getElementById('alertType').textContent = alertData.type;
+    document.getElementById('alertPerson').textContent = alertData.person;
+    document.getElementById('alertTimestamp').textContent = alertData.timestamp;
+    document.getElementById('alertLocation').textContent = `${alertData.lat}, ${alertData.lon}`;
+    document.getElementById('alertStatus').textContent = alertData.state;
 
-        // Initialize map
-        const map = L.map('map').setView([alertData.lat, alertData.lon], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-        L.marker([alertData.lat, alertData.lon]).addTo(map)
-            .bindPopup('Ubicación de la Alerta')
-            .openPopup();
+    // Initialize map with Leaflet
+    const map = L.map('map').setView([alertData.lat, alertData.lon], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    L.marker([alertData.lat, alertData.lon]).addTo(map)
+        .bindPopup('Ubicación de la Alerta')
+        .openPopup();
 
-        // Handle resolve button
-        document.getElementById('resolveAlert').addEventListener('click', function() {
-            document.getElementById('alertStatus').textContent = 'Resuelta';
-            document.getElementById('alertStatus').classList.remove('text-yellow-600');
-            document.getElementById('alertStatus').classList.add('text-green-600');
-            this.disabled = true;
-            this.classList.add('opacity-50', 'cursor-not-allowed');
-        });
+    // Set the initial value of the select element
+    document.getElementById('alertState').value = alertData.state;
+</script>
 
-        // Handle delete button
-        document.getElementById('deleteAlert').addEventListener('click', function() {
-            if (confirm('¿Está seguro de que desea eliminar esta alerta?')) {
-                alert('Alerta eliminada');
-                window.location.href = '/';
-            }
-        });
-    </script>
 </body>
 </html>
